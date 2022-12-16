@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.IO.Ports;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace AKG
 {
     internal static class SerialPortHandler
     {
-        static SerialPort serialPort = new SerialPort("COM4", 115200, Parity.None, 8, StopBits.One);
+        static SerialPort serialPort = new SerialPort("COM3", 115200, Parity.None, 8, StopBits.One);
 
         public static List<float> RotationBuffer = new List<float>();
         public static List<int> LightBuffer = new List<int>();
@@ -50,7 +48,7 @@ namespace AKG
                             {
                                 if (rValue <= 3.3f && rValue >= 0.0f)
                                 {
-                                    RotationBuffer.Add(rValue);
+                                    RotationBuffer.Add(-rValue * 1.8f);
                                 }
                             }                            
                             break;
