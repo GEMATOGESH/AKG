@@ -102,7 +102,8 @@ namespace AKG
                                "..\\..\\..\\objects\\" + _file + "\\textures\\diffuse.png",
                                "..\\..\\..\\objects\\" + _file + "\\textures\\specular.png",
                                "..\\..\\..\\objects\\" + _file + "\\textures\\normal.png",
-                               "..\\..\\..\\objects\\" + _file + "\\textures\\mrao.png");
+                               "..\\..\\..\\objects\\" + _file + "\\textures\\mrao.png",
+                               "..\\..\\..\\objects\\" + _file + "\\textures\\emission.png");
 
                 VectorTransformation.UpdateViewPort();
                 VectorTransformation.UpdateCameraBasicVectors();
@@ -286,28 +287,28 @@ namespace AKG
                     VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
                     renderer.DrawModel(this);
                     break;
-                case System.Windows.Input.Key.Up:
+                case System.Windows.Input.Key.C:
                     VectorTransformation.light[0].Z += 10;
                     lbLight.Content = VectorTransformation.light[0].X + ", " + VectorTransformation.light[0].Y + ", " + VectorTransformation.light[0].Z;
 
                     VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
                     renderer.DrawModel(this);
                     break;
-                case System.Windows.Input.Key.Down:
+                case System.Windows.Input.Key.V:
                     VectorTransformation.light[0].Z -= 10;
                     lbLight.Content = VectorTransformation.light[0].X + ", " + VectorTransformation.light[0].Y + ", " + VectorTransformation.light[0].Z;
 
                     VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
                     renderer.DrawModel(this);
                     break;
-                case System.Windows.Input.Key.Left:
+                case System.Windows.Input.Key.B:
                     VectorTransformation.light[0].X -= 10;
                     lbLight.Content = VectorTransformation.light[0].X + ", " + VectorTransformation.light[0].Y + ", " + VectorTransformation.light[0].Z;
 
                     VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
                     renderer.DrawModel(this);
                     break;
-                case System.Windows.Input.Key.Right:
+                case System.Windows.Input.Key.N:
                     VectorTransformation.light[0].X += 10;
                     lbLight.Content = VectorTransformation.light[0].X + ", " + VectorTransformation.light[0].Y + ", " + VectorTransformation.light[0].Z;
 

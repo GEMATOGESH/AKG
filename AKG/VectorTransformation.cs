@@ -85,8 +85,10 @@ namespace AKG
                            {
                                Model.worldVertices[i] = Vector3.Transform(Model.listV[i], World);
                                Model.screenVertices[i] = Vector4.Transform(Model.listV[i], Projection_View_Model);
+                               float recW = 1 / Model.screenVertices[i].W;
                                Model.screenVertices[i] /= Model.screenVertices[i].W;
                                Model.screenVertices[i] = Vector4.Transform(Model.screenVertices[i], Viewport);
+                               Model.screenVertices[i].W = recW;
                            }
                        }
                 );
