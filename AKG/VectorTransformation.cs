@@ -11,11 +11,12 @@ namespace AKG
         public static Vector3 YAxis = new Vector3(1.0f, 1.0f, 1.0f);
         public static Vector3 ZAxis = new Vector3(1.0f, 1.0f, 1.0f);
 
-        public static Vector3 eye = new Vector3(0.0f, 0.0f, 40.0f);
+        public static Vector3 eye = new Vector3(0.0f, 0.0f, 10.0f);
         public static Vector3 target = new Vector3(0.0f, 0.0f, 0.0f);
         public static Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
 
-        public static Vector3 light = new Vector3(0f, 40f, 40f);
+        public static Vector3[] light = { new Vector3(0f, 5f, 4f), new Vector3(0f, 5f, 1f), new Vector3(0f, 5f, 2f), new Vector3(0f, 5f, 6f) };
+        public static Vector3[] lightColor = { new Vector3(1f, 1f, 1f), new Vector3(1f, 0f, 0f), new Vector3(0f, 1f, 0f), new Vector3(0f, 0f, 1f) };
 
         public static float width = 1;
         public static float height = 1;

@@ -16,11 +16,11 @@ namespace AKG
         private static double _angleX = 0;
         private static double _angleY = 0;
         private static double _angleZ = 0;
-        private static double _scale = 1;
+        private static double _scale = 0.4;
 
         private static string _file = "Shovel Knight";
 
-        public static Vector3 movement = new(0, 0, 0);
+        public static Vector3 movement = new(0, -2, 0);
 
         public double angleX
         {
@@ -143,16 +143,16 @@ namespace AKG
                     if (SerialPortHandler.LightBuffer.Count > 0)
                     {
                         int value = SerialPortHandler.LightBuffer[0];
-                        int lightShiftValue = Math.Abs(value - (int)VectorTransformation.light.Z);
+                        int lightShiftValue = Math.Abs(value - (int)VectorTransformation.light[0].Z);
 
                         Dispatcher.BeginInvoke(DispatcherPriority.Normal, () =>
                         {
                             if (lightShiftValue > 10)
                             {
-                                VectorTransformation.light.Z =
-                                    VectorTransformation.light.Z < value ?
-                                    VectorTransformation.light.Z + lightShiftValue :
-                                    VectorTransformation.light.Z - lightShiftValue;
+                                VectorTransformation.light[0].Z =
+                                    VectorTransformation.light[0].Z < value ?
+                                    VectorTransformation.light[0].Z + lightShiftValue :
+                                    VectorTransformation.light[0].Z - lightShiftValue;
 
                                 VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
                                 renderer.DrawModel(this);
@@ -278,43 +278,43 @@ namespace AKG
                     renderer.DrawModel(this);
                     break;
                 case System.Windows.Input.Key.Up:
-                    VectorTransformation.light.Z += 10;
-                    lbLight.Content = VectorTransformation.light.X + ", " + VectorTransformation.light.Y + ", " + VectorTransformation.light.Z;
+                    VectorTransformation.light[0].Z += 10;
+                    lbLight.Content = VectorTransformation.light[0].X + ", " + VectorTransformation.light[0].Y + ", " + VectorTransformation.light[0].Z;
 
                     VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
                     renderer.DrawModel(this);
                     break;
                 case System.Windows.Input.Key.Down:
-                    VectorTransformation.light.Z -= 10;
-                    lbLight.Content = VectorTransformation.light.X + ", " + VectorTransformation.light.Y + ", " + VectorTransformation.light.Z;
+                    VectorTransformation.light[0].Z -= 10;
+                    lbLight.Content = VectorTransformation.light[0].X + ", " + VectorTransformation.light[0].Y + ", " + VectorTransformation.light[0].Z;
 
                     VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
                     renderer.DrawModel(this);
                     break;
                 case System.Windows.Input.Key.Left:
-                    VectorTransformation.light.X -= 10;
-                    lbLight.Content = VectorTransformation.light.X + ", " + VectorTransformation.light.Y + ", " + VectorTransformation.light.Z;
+                    VectorTransformation.light[0].X -= 10;
+                    lbLight.Content = VectorTransformation.light[0].X + ", " + VectorTransformation.light[0].Y + ", " + VectorTransformation.light[0].Z;
 
                     VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
                     renderer.DrawModel(this);
                     break;
                 case System.Windows.Input.Key.Right:
-                    VectorTransformation.light.X += 10;
-                    lbLight.Content = VectorTransformation.light.X + ", " + VectorTransformation.light.Y + ", " + VectorTransformation.light.Z;
+                    VectorTransformation.light[0].X += 10;
+                    lbLight.Content = VectorTransformation.light[0].X + ", " + VectorTransformation.light[0].Y + ", " + VectorTransformation.light[0].Z;
 
                     VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
                     renderer.DrawModel(this);
                     break;
                 case System.Windows.Input.Key.RightShift:
-                    VectorTransformation.light.Y += 10;
-                    lbLight.Content = VectorTransformation.light.X + ", " + VectorTransformation.light.Y + ", " + VectorTransformation.light.Z;
+                    VectorTransformation.light[0].Y += 10;
+                    lbLight.Content = VectorTransformation.light[0].X + ", " + VectorTransformation.light[0].Y + ", " + VectorTransformation.light[0].Z;
 
                     VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
                     renderer.DrawModel(this);
                     break;
                 case System.Windows.Input.Key.RightCtrl:
-                    VectorTransformation.light.Y -= 10;
-                    lbLight.Content = VectorTransformation.light.X + ", " + VectorTransformation.light.Y + ", " + VectorTransformation.light.Z;
+                    VectorTransformation.light[0].Y -= 10;
+                    lbLight.Content = VectorTransformation.light[0].X + ", " + VectorTransformation.light[0].Y + ", " + VectorTransformation.light[0].Z;
 
                     VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
                     renderer.DrawModel(this);

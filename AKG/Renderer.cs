@@ -17,7 +17,7 @@ namespace AKG
         private float diffuseFactor = 1.0f; 
         private float specularFactor = 0.1f;
         private float glossFactor = 25f;
-        private float lightIntensity = 2f;
+        private float lightIntensity = 3f;
 
         public float LightIntensity 
         { 
@@ -58,7 +58,7 @@ namespace AKG
             return values;
         }
 
-        private Vector3 SpecularLightning(Vector3 specularColor, Vector3 View, Vector3 lightDirection, Vector3 normal)
+        private Vector3 SpecularLightning(Vector3 specularColor, Vector3 View, Vector3 lightDirection, Vector3 normal, float intensity)
         {
             Vector3 reflection = Vector3.Normalize(Vector3.Reflect(lightDirection, normal));
             float RV = Math.Max(Vector3.Dot(reflection, -View), 0);
@@ -66,9 +66,9 @@ namespace AKG
             double temp = Math.Pow(RV, glossFactor);
             Vector3 values = new Vector3
             {
-                X = (float)(specularFactor * temp * specularColor.X),
-                Y = (float)(specularFactor * temp * specularColor.Y),
-                Z = (float)(specularFactor * temp * specularColor.Z)
+                X = (float)(specularFactor * temp * specularColor.X * intensity),
+                Y = (float)(specularFactor * temp * specularColor.Y * intensity),
+                Z = (float)(specularFactor * temp * specularColor.Z * intensity)
             };
 
             return values;
@@ -211,6 +211,16 @@ namespace AKG
             image.Source = bitmap;
         }
 
+        private Vector3 Sum(Vector3[] vectors)
+        {
+            Vector3 buf = Vector3.Zero;
+            for (int i = 0; i < vectors.Length; i++)
+            {
+                buf += vectors[i];
+            }
+            return buf;
+        }
+
         private void Rasterization(WriteableBitmap bitmap)
         {
             float?[,] z_buff = new float?[bitmap.PixelHeight, bitmap.PixelWidth];
@@ -339,13 +349,9 @@ namespace AKG
                             {
                                 z_buff[y, x] = pScreen.Z;
 
-                                // Нахождение обратного вектора направления света.
-                                Vector3 lightDirection = Vector3.Normalize(pWorld - VectorTransformation.light);
+                                // Нахождение направления взгляда.
                                 Vector3 viewDirection = Vector3.Normalize(pWorld - VectorTransformation.eye);
-
                                 Vector3 view = Vector3.Normalize(VectorTransformation.eye - pWorld);
-                                Vector3 light = Vector3.Normalize(VectorTransformation.light - pWorld);
-                                Vector3 halfWayVector = Vector3.Normalize(view + light);
 
                                 // original
                                 Vector2 texture = textureA + (x - screenA.X) * textureKoeff;
@@ -393,25 +399,40 @@ namespace AKG
                                     mrao = new Vector3(spcColor.R, spcColor.G, spcColor.B) / 255f;
                                 }
 
-                                // Нахождение дистанции до источника света.
-                                float distance = lightDirection.LengthSquared();
-                                // Затенение объекта в зависимости от дистанции света до модели.
-                                float attenuation = 1 / Math.Max(distance, 0.01f);
-                                // Получение затененности каждой точки.
-                                float intensity = Math.Max(Vector3.Dot(normal, -lightDirection), 0);
+                                Vector3[] diffuseValues = new Vector3[VectorTransformation.light.Length];
+                                Vector3[] specularValues = new Vector3[VectorTransformation.light.Length];
 
-                                // Освещение Фонга.
+                                Vector3[] shadeValues = new Vector3[VectorTransformation.light.Length];
+
+                                for (int i = 0; i < VectorTransformation.light.Length; i++)
+                                {
+                                    Vector3 lightDirection = pWorld - VectorTransformation.light[i];
+                                    Vector3 light = Vector3.Normalize(VectorTransformation.light[i] - pWorld);
+                                    Vector3 halfWayVector = Vector3.Normalize(view + light);
+
+                                    // Нахождение дистанции до источника света.
+                                    float distance = lightDirection.LengthSquared();
+                                    // Затенение объекта в зависимости от дистанции света до модели.
+                                    float attenuation = 1 / Math.Max(distance, 0.01f);
+                                    // Получение затененности каждой точки.
+                                    float intensity = Math.Max(Vector3.Dot(normal, -lightDirection), 0);
+
+                                    // Освещение Фонга.
+                                    diffuseValues[i] = DiffuseLightning(color, intensity * attenuation);
+                                    specularValues[i] = SpecularLightning(specular, viewDirection, Vector3.Normalize(lightDirection), normal, intensity * attenuation);
+
+                                    // PBR.
+                                    shadeValues[i] = GetPhysicallyBasedRenderingLight(VectorTransformation.lightColor[i], view, light, halfWayVector, normal);
+                                }
+
                                 Vector3 ambientValues = AmbientLightning(color);
-                                Vector3 diffuseValues = DiffuseLightning(color, intensity * attenuation);
-                                Vector3 specularValues = SpecularLightning(specular, viewDirection, lightDirection, normal);
 
                                 // Отрисовка Гуро.
-                                //DrawPixel(bitmap, x, y, ambientValues + diffuseValues + specularValues);
+                                //DrawPixelLDR(bitmap, x, y, ambientValues + Sum(diffuseValues) + Sum(specularValues));
                                 //window.lbPBR.Content = "No";
 
-                                // Отрисовка ПБР.
-                                Vector3 shade = GetPhysicallyBasedRenderingLight(new(1.0f, 1.0f, 1.0f), view, light, halfWayVector, normal);
-                                DrawPixelLDR(bitmap, x, y, shade);
+                                // Отрисовка PBR.
+                                DrawPixelLDR(bitmap, x, y, Sum(shadeValues));
                                 window.lbPBR.Content = "Yes";
                             }
                         }
