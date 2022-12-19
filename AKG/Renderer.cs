@@ -15,9 +15,9 @@ namespace AKG
 
         private float ambientFactor = 1.0f;
         private float diffuseFactor = 1.0f; 
-        private float specularFactor = 0.1f;
+        private float specularFactor = 3f;
         private float glossFactor = 25f;
-        private float lightIntensity = 3f;
+        private float lightIntensity = 1f;
 
         public float LightIntensity 
         { 
@@ -166,10 +166,16 @@ namespace AKG
             return result;
         }
          
-        private void DrawPixelLDR(WriteableBitmap bitmap, int x, int y, Vector3 light)
+        private void DrawPixelLDR(WriteableBitmap bitmap, int x, int y, Vector3 light, bool fourthLab = false)
         {
-            //light *= 255f;
-            light = LinearToSrgb(AcesFilmic(light)) * 255f;
+            if (fourthLab)
+            {
+                light *= 255f;
+            }
+            else
+            {
+                light = LinearToSrgb(AcesFilmic(light)) * 255f;
+            }
 
             DrawPixelHDR(bitmap, x, y, light);
         }
@@ -224,8 +230,6 @@ namespace AKG
         private void Rasterization(WriteableBitmap bitmap)
         {
             float?[,] z_buff = new float?[bitmap.PixelHeight, bitmap.PixelWidth];
-
-            //FindNormals();
 
             foreach (int[] vector in Model.listF)
             {
@@ -406,6 +410,7 @@ namespace AKG
 
                                 for (int i = 0; i < VectorTransformation.light.Length; i++)
                                 {
+                                    // Нахождение медианного вектора, направления света и самого вектора света.
                                     Vector3 lightDirection = pWorld - VectorTransformation.light[i];
                                     Vector3 light = Vector3.Normalize(VectorTransformation.light[i] - pWorld);
                                     Vector3 halfWayVector = Vector3.Normalize(view + light);
@@ -428,7 +433,7 @@ namespace AKG
                                 Vector3 ambientValues = AmbientLightning(color);
 
                                 // Отрисовка Гуро.
-                                //DrawPixelLDR(bitmap, x, y, ambientValues + Sum(diffuseValues) + Sum(specularValues));
+                                //DrawPixelLDR(bitmap, x, y, ambientValues + diffuseValues[0] + specularValues[0], true);
                                 //window.lbPBR.Content = "No";
 
                                 // Отрисовка PBR.

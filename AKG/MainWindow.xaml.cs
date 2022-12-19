@@ -108,6 +108,15 @@ namespace AKG
                 VectorTransformation.UpdateCameraBasicVectors();
                 VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
 
+                slider.Value = renderer.LightIntensity;
+                lbRotateX.Content = angleX.ToString("#.##");
+                lbRotateY.Content = angleY.ToString("#.##");
+                lbRotateZ.Content = angleZ.ToString("#.##");
+                lbscale.Content = scale.ToString("#.##########");
+                lbPos.Content = movement.X + ", " + movement.Y + ", " + movement.Z;
+                lbCamera.Content = VectorTransformation.eye.X + ", " + VectorTransformation.eye.Y + ", " + VectorTransformation.eye.Z;
+                lbLight.Content = VectorTransformation.light[0].X + ", " + VectorTransformation.light[0].Y + ", " + VectorTransformation.light[0].Z;
+
                 renderer.DrawModel(this);
 
                 StartSerialPortHandle();
