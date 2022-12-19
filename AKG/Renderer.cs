@@ -18,6 +18,7 @@ namespace AKG
         private float specularFactor = 3f;
         private float glossFactor = 25f;
         private float lightIntensity = 1f;
+        private bool  PBRMode = false;
 
         public float LightIntensity 
         { 
@@ -166,9 +167,9 @@ namespace AKG
             return result;
         }
          
-        private void DrawPixelLDR(WriteableBitmap bitmap, int x, int y, Vector3 light, bool fourthLab = false)
+        private void DrawPixelLDR(WriteableBitmap bitmap, int x, int y, Vector3 light)
         {
-            if (fourthLab)
+            if (!PBRMode)
             {
                 light *= 255f;
             }
@@ -432,13 +433,18 @@ namespace AKG
 
                                 Vector3 ambientValues = AmbientLightning(color);
 
-                                // Отрисовка Гуро.
-                                //DrawPixelLDR(bitmap, x, y, ambientValues + diffuseValues[0] + specularValues[0], true);
-                                //window.lbPBR.Content = "No";
-
-                                // Отрисовка PBR.
-                                DrawPixelLDR(bitmap, x, y, Sum(shadeValues));
-                                window.lbPBR.Content = "Yes";
+                                if (!PBRMode)
+                                {
+                                    // Отрисовка Гуро.
+                                    DrawPixelLDR(bitmap, x, y, ambientValues + Sum(diffuseValues) + Sum(specularValues));
+                                    window.lbPBR.Content = "No";
+                                }
+                                else
+                                {
+                                    // Отрисовка PBR.
+                                    DrawPixelLDR(bitmap, x, y, Sum(shadeValues));
+                                    window.lbPBR.Content = "Yes";
+                                }
                             }
                         }
                     }
