@@ -359,7 +359,7 @@ namespace AKG
                                 if (Model.textureFile != null)
                                 {
                                     System.Drawing.Color objColor = Model.textureFile.GetPixel(Convert.ToInt32(texture.X * (Model.textureFile.Width - 1)), Convert.ToInt32((1 - texture.Y) * (Model.textureFile.Height - 1)));
-                                    color = SrgbToLinear(new Vector3(objColor.R, objColor.G, objColor.B) / 255f);
+                                    color = new Vector3(objColor.R, objColor.G, objColor.B) / 255f;
                                 }
 
                                 // Цвет отражения.
@@ -414,7 +414,7 @@ namespace AKG
                                     //// Нахождение дистанции до источника света.
                                     //float distance = lightDirection.LengthSquared();
                                     //// Затенение объекта в зависимости от дистанции света до модели.
-                                    float attenuation = 1 / Math.Max(distance * distance, 1e-4f);
+                                    float attenuation = 1 / Math.Max(distance, 1e-4f);
                                     //// Получение затененности каждой точки.
                                     //float intensity = Math.Max(Vector3.Dot(normal, -lightDirection), 0);
 
