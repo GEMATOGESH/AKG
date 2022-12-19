@@ -137,7 +137,16 @@ namespace AKG
 
         private Vector3 GetPhysicallyBasedRenderingLight(Vector3 lightColor, Vector3 view, Vector3 light, Vector3 halfWayVec, Vector3 normal, float attenuation)
         {
-            Vector3 f0 = Vector3.Lerp(new Vector3(0.04f), color, mrao.X);
+            Vector3 f0 = color;
+
+            if (mrao.X < 0.5 && mrao.X > 0.15)
+            {
+                f0 = Vector3.Lerp(new Vector3(0.04f), color, mrao.X);
+            }
+            else if (mrao.X <= 0.15)
+            {
+                f0 = new Vector3(0.04f);
+            }
 
             Vector3 ks = GetFresnelSchlickFactor(f0, view, halfWayVec);
             Vector3 kd = (Vector3.One - ks) * (1.0f - mrao.X);
@@ -359,7 +368,7 @@ namespace AKG
                                 if (Model.textureFile != null)
                                 {
                                     System.Drawing.Color objColor = Model.textureFile.GetPixel(Convert.ToInt32(texture.X * (Model.textureFile.Width - 1)), Convert.ToInt32((1 - texture.Y) * (Model.textureFile.Height - 1)));
-                                    color = new Vector3(objColor.R, objColor.G, objColor.B) / 255f;
+                                    color = SrgbToLinear(new Vector3(objColor.R, objColor.G, objColor.B) / 255f);
                                 }
 
                                 // Цвет отражения.
