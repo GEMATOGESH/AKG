@@ -70,16 +70,9 @@
         <Label x:Name="lbPoly" Content="0" HorizontalAlignment="Left" Margin="132,266,0,0" VerticalAlignment="Top" Foreground="White"/>
 
         <Label Content="W, A, S, D, E, Q - for moving. I, J, K, L, U, O - for rotating. T, G - for scaling. Arrows for light X and Z movment, RCtrl and RShift for Y light movment. Num7, Num8, Num9, Num4, Num5, Num6 for camera movment." Foreground="White" Height="26" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
-
-        <GroupBox Header="Serial Port" Margin="0,0,10,10" Foreground="White" HorizontalAlignment="Right" Width="135" Height="108" VerticalAlignment="Bottom">
+        <GroupBox Header="Light intensity" Margin="0,0,10,10" Foreground="White" HorizontalAlignment="Right" Width="135" Height="61" VerticalAlignment="Bottom">
             <Grid HorizontalAlignment="Center" Width="123">
-                <RadioButton Content="Rotation" IsChecked="True" Margin="0,17,0,0" Height="23" VerticalAlignment="Top" HorizontalAlignment="Center" Width="85" Foreground="White" Checked="RotationButton_Checked"/>
-                <RadioButton Content="Lightning" Margin="0,45,0,17" Height="23" HorizontalAlignment="Center" Width="87" Foreground="White" Checked="LightningButton_Checked"/>
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="Light intensity" Margin="0,0,10,123" Foreground="White" HorizontalAlignment="Right" Width="135" Height="61" VerticalAlignment="Bottom">
-            <Grid HorizontalAlignment="Center" Width="123">
-                <Slider x:Name="slider" Width="106" Height="18" Minimum="0" Maximum="5" TickPlacement="TopLeft" IsSnapToTickEnabled="True" Value="2" SmallChange="0" ValueChanged="Slider_ValueChanged" TickFrequency="0.5"/>
+                <Slider x:Name="slider" Width="106" Height="18" Minimum="0" Maximum="10" TickPlacement="TopLeft" IsSnapToTickEnabled="True" Value="5" SmallChange="0" ValueChanged="Slider_ValueChanged" TickFrequency="1"/>
             </Grid>
         </GroupBox>
     </Grid>

@@ -17,7 +17,7 @@ namespace AKG
         private float diffuseFactor = 1.0f; 
         private float specularFactor = 3f;
         private float glossFactor = 25f;
-        private float lightIntensity = 50f;
+        private float lightIntensity = 5f;
         private bool  PBRMode = true;
 
         public float LightIntensity 

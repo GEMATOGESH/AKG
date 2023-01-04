@@ -16,7 +16,7 @@ namespace AKG
         private static double _angleX = 0;
         private static double _angleY = 0;
         private static double _angleZ = 0;
-        private static double _scale = 0.01;
+        private static double _scale = 0.5;
 
         private static string _file = "Shovel Knight";
 
@@ -30,7 +30,7 @@ namespace AKG
                 if (value != _angleX)
                 {
                     _angleX = value;
-                    lbRotateX.Content = angleX.ToString("#.##");
+                    lbRotateX.Content = angleX.ToString("0.0");
 
                     VectorTransformation.TransformVectors((float)_angleX, (float)_angleY, (float)_angleZ, (float)_scale, movement);
                     renderer.DrawModel(this);
@@ -46,7 +46,7 @@ namespace AKG
                 if (value != _angleY)
                 {
                     _angleY = value;
-                    lbRotateY.Content = angleY.ToString("#.##");
+                    lbRotateY.Content = angleY.ToString("0.0");
 
                     VectorTransformation.TransformVectors((float)_angleX, (float)_angleY, (float)_angleZ, (float)_scale, movement);
                     renderer.DrawModel(this);
@@ -62,7 +62,7 @@ namespace AKG
                 if (value != _angleZ)
                 {
                     _angleZ = value;
-                    lbRotateZ.Content = angleZ.ToString("#.##");
+                    lbRotateZ.Content = angleZ.ToString("0.0");
 
                     VectorTransformation.TransformVectors((float)_angleX, (float)_angleY, (float)_angleZ, (float)_scale, movement);
                     renderer.DrawModel(this);
@@ -78,7 +78,7 @@ namespace AKG
                 if (value != _scale)
                 {
                     _scale = value;
-                    lbscale.Content = scale.ToString("#.##########");
+                    lbscale.Content = scale.ToString("0.0");
 
                     VectorTransformation.TransformVectors((float)_angleX, (float)_angleY, (float)_angleZ, (float)_scale, movement);
                     renderer.DrawModel(this);
@@ -110,69 +110,16 @@ namespace AKG
                 VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
 
                 slider.Value = renderer.LightIntensity;
-                lbRotateX.Content = angleX.ToString("#.##");
-                lbRotateY.Content = angleY.ToString("#.##");
-                lbRotateZ.Content = angleZ.ToString("#.##");
-                lbscale.Content = scale.ToString("#.##########");
+                lbRotateX.Content = angleX.ToString("0.0");
+                lbRotateY.Content = angleY.ToString("0.0");
+                lbRotateZ.Content = angleZ.ToString("0.0");
+                lbscale.Content = scale.ToString("0.0");
                 lbPos.Content = movement.X + ", " + movement.Y + ", " + movement.Z;
                 lbCamera.Content = VectorTransformation.eye.X + ", " + VectorTransformation.eye.Y + ", " + VectorTransformation.eye.Z;
                 lbLight.Content = VectorTransformation.light[0].X + ", " + VectorTransformation.light[0].Y + ", " + VectorTransformation.light[0].Z;
 
                 renderer.DrawModel(this);
-
-                StartSerialPortHandle();
             };
-        }
-
-        private void StartSerialPortHandle()
-        {
-            Task.Run(() => SerialPortHandler.Start());
-            Task.Run(() =>
-            {
-                while (true)
-                {
-                    if (SerialPortHandler.RotationBuffer.Count > 0)
-                    {
-                        float value = SerialPortHandler.RotationBuffer[0];
-                        float angleShiftValue = Math.Abs(value - (float)angleY);
-
-                        Dispatcher.BeginInvoke(DispatcherPriority.Normal, () =>
-                        {
-                            if(angleShiftValue > 0.2f)
-                            {
-                                angleY = value;
-
-                                VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
-                                renderer.DrawModel(this);
-                            }
-                        });
-
-                        SerialPortHandler.RotationBuffer.RemoveAt(0);
-                    }
-
-                    if (SerialPortHandler.LightBuffer.Count > 0)
-                    {
-                        int value = SerialPortHandler.LightBuffer[0];
-                        int lightShiftValue = Math.Abs(value - (int)VectorTransformation.light[0].Z);
-
-                        Dispatcher.BeginInvoke(DispatcherPriority.Normal, () =>
-                        {
-                            if (lightShiftValue > 10)
-                            {
-                                VectorTransformation.light[0].Z =
-                                    VectorTransformation.light[0].Z < value ?
-                                    VectorTransformation.light[0].Z + lightShiftValue :
-                                    VectorTransformation.light[0].Z - lightShiftValue;
-
-                                VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
-                                renderer.DrawModel(this);
-                            }
-                        });
-
-                        SerialPortHandler.LightBuffer.RemoveAt(0);
-                    }
-                }
-            });
         }
 
         private void window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
