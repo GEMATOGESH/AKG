@@ -406,9 +406,6 @@ namespace AKG
                                     emission = SrgbToLinear(new Vector3(emColor.R, emColor.G, emColor.B) / 255f);
                                 }
 
-                                Vector3[] diffuseValues = new Vector3[VectorTransformation.light.Length];
-                                Vector3[] specularValues = new Vector3[VectorTransformation.light.Length];
-
                                 Vector3 ambient = 0.05f * color * mrao.Z;
                                 Vector3 shadeValue = ambient + emission * 5;
 
@@ -417,38 +414,18 @@ namespace AKG
                                     // Нахождение медианного вектора, направления света и самого вектора света.
                                     float distance = Vector3.Distance(pWorld, VectorTransformation.light[i]);
                                     Vector3 lightDirection = (pWorld - VectorTransformation.light[i]) / distance;
-                                    //Vector3 light = Vector3.Normalize(VectorTransformation.light[i] - pWorld);
                                     Vector3 halfWayVector = -Vector3.Normalize(viewDirection + lightDirection);
 
-                                    //// Нахождение дистанции до источника света.
-                                    //float distance = lightDirection.LengthSquared();
-                                    //// Затенение объекта в зависимости от дистанции света до модели.
+                                    // Затенение объекта в зависимости от дистанции света до модели.
                                     float attenuation = 1 / Math.Max(distance, 1e-4f);
-                                    //// Получение затененности каждой точки.
-                                    //float intensity = Math.Max(Vector3.Dot(normal, -lightDirection), 0);
-
-                                    //// Освещение Фонга.
-                                    //diffuseValues[i] = DiffuseLightning(color, intensity * attenuation);
-                                    //specularValues[i] = SpecularLightning(specular, viewDirection, Vector3.Normalize(lightDirection), normal, intensity * attenuation);
 
                                     // PBR.
                                     shadeValue += GetPhysicallyBasedRenderingLight(VectorTransformation.lightColor[i], viewDirection, lightDirection, halfWayVector, normal, attenuation);
                                 }
 
-                                Vector3 ambientValues = AmbientLightning(color);
-
-                                if (!PBRMode)
-                                {
-                                    // Отрисовка Гуро.
-                                    //DrawPixelLDR(bitmap, x, y, ambientValues + Sum(diffuseValues) + Sum(specularValues));
-                                    //window.lbPBR.Content = "No";
-                                }
-                                else
-                                {
-                                    // Отрисовка PBR.
-                                    DrawPixelLDR(bitmap, x, y, shadeValue);
-                                    window.lbPBR.Content = "Yes";
-                                }
+                                // Отрисовка PBR.
+                                DrawPixelLDR(bitmap, x, y, shadeValue);
+                                window.lbPBR.Content = "Yes";
                             }
                         }
                     }

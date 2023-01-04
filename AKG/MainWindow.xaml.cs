@@ -1,8 +1,5 @@
-﻿using System;
-using System.Numerics;
-using System.Threading.Tasks;
+﻿using System.Numerics;
 using System.Windows;
-using System.Windows.Threading;
 
 namespace AKG
 {
@@ -288,16 +285,6 @@ namespace AKG
             VectorTransformation.TransformVectors((float)angleX, (float)angleY, (float)angleZ, (float)scale, movement);
             
             renderer.DrawModel(this);
-        }
-
-        private void RotationButton_Checked(object sender, RoutedEventArgs e)
-        {
-            SerialPortHandler.SendCommand("R");
-        }
-
-        private void LightningButton_Checked(object sender, RoutedEventArgs e)
-        {
-            SerialPortHandler.SendCommand("L");
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

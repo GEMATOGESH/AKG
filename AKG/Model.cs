@@ -60,11 +60,6 @@ namespace AKG
                         .Select(x => x.Skip(1).ToArray())
                         .Select(x => new Vector2(Array.ConvertAll(x, float.Parse))).ToList();
 
-                    //listF = vertices
-                    //    .Where(x => x.StartsWith('f') == true)
-                    //    .Select(x => x.Remove(0, 2).TrimEnd().Split('/', ' ')).ToArray()
-                    //    .Select(x => Array.ConvertAll(x, int.Parse)).ToList();
-
                     var mas_f = vertices.Where(x => x.StartsWith('f') == true);
 
                     foreach (string str in mas_f)
