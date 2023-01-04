@@ -11,11 +11,12 @@ namespace AKG
         public static Vector3 YAxis = new Vector3(1.0f, 1.0f, 1.0f);
         public static Vector3 ZAxis = new Vector3(1.0f, 1.0f, 1.0f);
 
-        public static Vector3 eye = new Vector3(0.0f, 0.0f, 40.0f);
+        public static Vector3 eye = new Vector3(0.0f, 0.0f, 10.0f);
         public static Vector3 target = new Vector3(0.0f, 0.0f, 0.0f);
         public static Vector3 up = new Vector3(0.0f, 1.0f, 0.0f);
 
-        public static Vector3 light = new Vector3(0f, 40f, 40f);
+        public static Vector3[] light = { new Vector3(0f, 0f, 15f), new Vector3(10f, 0f, 15f), new Vector3(-10f, 0f, 15f), new Vector3(20f, 0f, 15f) };
+        public static Vector3[] lightColor = { new Vector3(1f, 1f, 1f), new Vector3(1f, 0f, 0f), new Vector3(0f, 1f, 0f), new Vector3(0f, 0f, 1f) };
 
         public static float width = 1;
         public static float height = 1;
@@ -84,8 +85,10 @@ namespace AKG
                            {
                                Model.worldVertices[i] = Vector3.Transform(Model.listV[i], World);
                                Model.screenVertices[i] = Vector4.Transform(Model.listV[i], Projection_View_Model);
+                               float recW = 1 / Model.screenVertices[i].W;
                                Model.screenVertices[i] /= Model.screenVertices[i].W;
                                Model.screenVertices[i] = Vector4.Transform(Model.screenVertices[i], Viewport);
+                               Model.screenVertices[i].W = recW;
                            }
                        }
                 );

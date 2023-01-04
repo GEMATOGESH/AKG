@@ -28,11 +28,12 @@ namespace AKG
         public static Bitmap mirrorMap;
         public static Bitmap normalMap;
         public static Bitmap mraoMap;
+        public static Bitmap emissionMap;
 
         private static string[] verticesTypes = { "v", "vt", "vn", "f"};
 
         public static void ReadFile(MainWindow mw, string filePath, string diffuseMapPath, string mirrorMapPath, 
-            string normalMapPath, string mraoMapPath)
+            string normalMapPath, string mraoMapPath, string emissionMapPath)
         {
             try
             {
@@ -58,11 +59,6 @@ namespace AKG
                         .Where(x => x[0] == "vt")
                         .Select(x => x.Skip(1).ToArray())
                         .Select(x => new Vector2(Array.ConvertAll(x, float.Parse))).ToList();
-
-                    //listF = vertices
-                    //    .Where(x => x.StartsWith('f') == true)
-                    //    .Select(x => x.Remove(0, 2).TrimEnd().Split('/', ' ')).ToArray()
-                    //    .Select(x => Array.ConvertAll(x, int.Parse)).ToList();
 
                     var mas_f = vertices.Where(x => x.StartsWith('f') == true);
 
@@ -147,13 +143,22 @@ namespace AKG
 
                 try
                 {
+                    emissionMap = (Bitmap)Bitmap.FromFile(emissionMapPath);
+                }
+                catch (Exception ex)
+                {
+                    emissionMap = null;
+                }
+
+                try
+                {
                     normalMap = (Bitmap)Bitmap.FromFile(normalMapPath);
                     mw.lbNormal.Content = "Yes";
                     fileNormalsOrig = new Vector3[normalMap.Width, normalMap.Height];
 
-                    for (int i = 0; i < normalMap.Width; i++)
+                    for (int i = 0; i < normalMap.Width - 1; i++)
                     {
-                        for (int j = 0; j < normalMap.Height; j++)
+                        for (int j = 0; j < normalMap.Height - 1; j++)
                         {
                             Color normalColor = normalMap.GetPixel(i, j);
                             Vector3 normal = new Vector3(normalColor.R / 255f, normalColor.G / 255f, normalColor.B / 255f);
