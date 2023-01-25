@@ -1,5 +1,4 @@
 # WPFObjRenderer3D
-3D renderer of .obj files in C# WPF
 
 # Лабораторная работа 1
 1) Разработать парсер файлов формата .obj
